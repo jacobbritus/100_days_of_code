@@ -1,2 +1,0 @@
-variablething = "a"
-abc = b
