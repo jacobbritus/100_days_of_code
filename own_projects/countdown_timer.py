@@ -1,9 +1,8 @@
 # countdown timer with ascii art project!
 import time
 import os
-from colorama import Fore, init
-
-init(autoreset=True)
+# from colorama import Fore, init
+# init(autoreset=True)
 
 
 def clear_screen():
@@ -92,6 +91,103 @@ numbers = {
   \__, |
     /_/  
        """}
+
+spacing = r"""
+  _ 
+ (_)
+    
+  _ 
+ (_)
+
+"""
+
+while True:
+    user_input_minutes = input("how many minutes?\n> ")
+    if user_input_minutes.isdigit():
+        user_input_minutes = int(user_input_minutes)
+
+        if 59 > user_input_minutes >= 0:
+            user_input_minutes = str(user_input_minutes)
+
+
+            try:
+                third_number = int(user_input_minutes[1])
+                fourth_number = int(user_input_minutes[0])
+
+            except IndexError:
+                third_number = int(user_input_minutes[0])
+                fourth_number = 0
+
+
+
+            break
+
+        else:
+            input("Invalid input (Enter a number between 0 - 59")
+    else:
+        input("Invalid input (Enter a number between 0 - 59)")
+    clear_screen()
+
+
+
+while True:
+    user_input_seconds = input("how many seconds?\n> ")
+    if user_input_seconds.isdigit():
+        user_input_seconds = int(user_input_seconds)
+
+        if 59 > user_input_seconds >= 0:
+            user_input_seconds = str(user_input_seconds)
+
+            try:
+                first_number = int(user_input_seconds[0])
+                second_number = int(user_input_seconds[1])  # 0
+            except IndexError:
+                second_number = int(user_input_seconds[0])
+                first_number = 0
+            break
+
+        else:
+            input("Invalid input (Enter a number between 0 - 59)")
+    else:
+        input("Invalid input (Enter a number between 0 - 59)")
+    clear_screen()
+
+
+if int(user_input_seconds) == 0 and int(user_input_minutes) == 0:
+    input("The timer is starts at 0. Bye.")
+
+
+
+
+
+
+
+total_ticks = int(user_input_minutes) * 60 + int(user_input_seconds)
+
+for i in range(0, total_ticks):
+
+    if second_number == -1:
+        first_number -= 1
+        second_number += 10
+
+    if first_number == -1:
+        third_number -= 1
+        first_number += 6
+
+    if third_number == -1:
+        fourth_number -= 1
+        third_number += 10
+
+    display = numbers[fourth_number], numbers[third_number], spacing, numbers[first_number], numbers[second_number]
+
+    print("_________________________________")
+    for number in zip(*(number.splitlines() for number in display)):
+        print("".join(number))
+    print("_________________________________")
+    second_number -= 1
+    time.sleep(0.5)
+    clear_screen()
+
 
 # alright so i got all the numbers, now i have got to find out how to print them next to each other
 
@@ -293,39 +389,6 @@ spacing = r"""
 #     time.sleep(0.3)
 
 
-user_input_minutes = int(input("how many minutes?\n>"))
-minutes = user_input_minutes
-user_input_seconds = input("how many seconds?\n>")
-
-first_number = 0
-
-try:
-    first_number = int(user_input_seconds[0])
-    second_number = int(user_input_seconds[1])  # 0
-except IndexError:
-    second_number = first_number
-    first_number = 0
-
-total_ticks = minutes * 60 + int(user_input_seconds)
-
-for i in range(0, total_ticks):
-
-    if second_number == -1:
-        first_number -= 1
-        second_number += 10
-
-    if first_number == -1:
-        minutes -= 1
-        first_number += 6
-
-    display = numbers[minutes], spacing, numbers[first_number], numbers[second_number]
-    print("_________________________________")
-    for number in zip(*(number.splitlines() for number in display)):
-        print("".join(number))
-    print("_________________________________")
-    second_number -= 1
-    time.sleep(0.5)
-    clear_screen()
 
 # succes
 
