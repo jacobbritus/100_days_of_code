@@ -64,7 +64,6 @@ numbers = {
  | '_ \ 
  | (_) |
   \___/ 
-
        """,
 
     7: r"""   
@@ -78,10 +77,9 @@ numbers = {
     8: r"""   
    ___  
   ( _ ) 
-  / _ \ 
+  /|_|\ 
  | (_) |
   \___/ 
-
        """,
 
     9: r"""   
@@ -101,6 +99,8 @@ spacing = r"""
 
 """
 
+
+# getting minutes
 while True:
     user_input_minutes = input("how many minutes?\n> ")
     if user_input_minutes.isdigit():
@@ -111,15 +111,12 @@ while True:
 
 
             try:
-                third_number = int(user_input_minutes[1])
-                fourth_number = int(user_input_minutes[0])
+                third_digit = int(user_input_minutes[1])
+                fourth_digit = int(user_input_minutes[0])
 
             except IndexError:
-                third_number = int(user_input_minutes[0])
-                fourth_number = 0
-
-
-
+                third_digit = int(user_input_minutes[0])
+                fourth_digit = 0
             break
 
         else:
@@ -129,7 +126,7 @@ while True:
     clear_screen()
 
 
-
+#getting seconds
 while True:
     user_input_seconds = input("how many seconds?\n> ")
     if user_input_seconds.isdigit():
@@ -139,12 +136,59 @@ while True:
             user_input_seconds = str(user_input_seconds)
 
             try:
-                first_number = int(user_input_seconds[0])
-                second_number = int(user_input_seconds[1])  # 0
+                second_digit = int(user_input_seconds[0])
+                first_digit = int(user_input_seconds[1])  # 0
             except IndexError:
-                second_number = int(user_input_seconds[0])
-                first_number = 0
+                first_digit = int(user_input_seconds[0])
+                second_digit = 0
             break
+
+
+
+        elif 3600 >= int(user_input_seconds) >= 60:
+            minutes = user_input_seconds // 60
+            seconds = user_input_seconds % 60
+
+            minutes = str(minutes)
+            seconds = str(seconds)
+
+            print(minutes)
+            print(seconds)
+            input()
+
+
+
+            try:
+                second_digit = int(seconds[0])
+                first_digit = int(seconds[1])  #
+            except IndexError:
+                first_digit = int(seconds[0])
+                second_digit = 0
+
+
+            try:
+
+                third_digit += int(minutes[1])
+
+                if int(minutes) >= 10:
+                    fourth_digit += int(minutes[0])
+                    fourth_digit += third_digit // 10
+                    third_digit = third_digit % 10
+
+
+
+            except IndexError:
+                third_digit += int(minutes[0])
+
+
+
+            break
+
+
+
+
+
+
 
         else:
             input("Invalid input (Enter a number between 0 - 59)")
@@ -153,41 +197,45 @@ while True:
     clear_screen()
 
 
+
+
+
+
+
+
+
 if int(user_input_seconds) == 0 and int(user_input_minutes) == 0:
     input("The timer is starts at 0. Bye.")
 
 
 
-
-
-
-
-total_ticks = int(user_input_minutes) * 60 + int(user_input_seconds)
-
+# the countdown timer
+total_ticks = int(user_input_minutes) * 60 + int(user_input_seconds) + 1
 for i in range(0, total_ticks):
 
-    if second_number == -1:
-        first_number -= 1
-        second_number += 10
+    if first_digit == -1:
+        second_digit -= 1
+        first_digit += 10
 
-    if first_number == -1:
-        third_number -= 1
-        first_number += 6
+    if second_digit == -1:
+        third_digit -= 1
+        second_digit += 6
 
-    if third_number == -1:
-        fourth_number -= 1
-        third_number += 10
+    if third_digit == -1:
+        fourth_digit -= 1
+        third_digit += 10
 
-    display = numbers[fourth_number], numbers[third_number], spacing, numbers[first_number], numbers[second_number]
+    display = numbers[fourth_digit], numbers[third_digit], spacing, numbers[second_digit], numbers[first_digit]
 
     print("_________________________________")
     for number in zip(*(number.splitlines() for number in display)):
         print("".join(number))
     print("_________________________________")
-    second_number -= 1
+    first_digit -= 1
     time.sleep(0.5)
     clear_screen()
 
+input()
 
 # alright so i got all the numbers, now i have got to find out how to print them next to each other
 
