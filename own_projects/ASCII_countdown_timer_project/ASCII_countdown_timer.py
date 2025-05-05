@@ -93,7 +93,7 @@ r"""
   \__, |
     /_/  
        """,
-        "spacing":
+        ":":
 r"""
   _ 
  (_)
@@ -168,14 +168,23 @@ def countdown_timer():
             minutes, seconds = divmod(i, 60)
             hours, minutes = divmod(minutes, 60)
 
+        colon = ascii_art(":")
+        # assigning hour digits
+        hour_tens = ascii_art(str(hours).zfill(2)[0])
+        hour_units = ascii_art(str(hours).zfill(2)[1])
+        # assigning minute digits
+        minute_tens = ascii_art(str(minutes).zfill(2)[0])
+        minute_units = ascii_art(str(minutes).zfill(2)[1])
+        # assigning digits
+        second_tens = ascii_art(str(seconds).zfill(2)[0])
+        second_units = ascii_art(str(seconds).zfill(2)[1])
+
         # what the user sees
-        display = ascii_art(str(hours).zfill(2)[0]), ascii_art(str(hours).zfill(2)[1]), ascii_art("spacing"),ascii_art(str(minutes).zfill(2)[0]), ascii_art(str(minutes).zfill(2)[1]), ascii_art("spacing"), ascii_art(str(seconds).zfill(2)[0]), ascii_art(str(seconds).zfill(2)[1])
+        display = hour_tens, hour_units, colon, minute_tens, minute_units, colon, second_tens, second_units
 
         # prints the ascii art next to each other
         for number in zip(*(number.splitlines() for number in display)):
             print("".join(number))
-
-
 
         # countdown logic and clear screen
         seconds -= 1
@@ -185,12 +194,43 @@ def countdown_timer():
     input("time's up!")  # possible alarm
 
 
-countdown_timer()
 
 
 
+def logo():
+    print(r"""
+     _    ____   ____ ___ ___      _    ____ _____   _____ ___ __  __ _____ ____  
+    / \  / ___| / ___|_ _|_ _|    / \  |  _ \_   _| |_   _|_ _|  \/  | ____|  _ \ 
+   / _ \ \___ \| |    | | | |    / _ \ | |_) || |     | |  | || |\/| |  _| | |_) |
+  / ___ \ ___) | |___ | | | |   / ___ \|  _ < | |     | |  | || |  | | |___|  _ < 
+ /_/   \_\____/ \____|___|___| /_/   \_\_| \_\|_|     |_| |___|_|  |_|_____|_| \_\                          
+    """)
 
 
+def menu_options():
+    print(85 * "─")
+    print("1. Countdown")
+    print("2. Settings (COMING SOON)")
+    print(25 * "─")
+
+
+def application():
+
+    while True:
+        logo()
+        menu_options()
+        user_input = input("> ").strip().lower()
+        clear_screen()
+
+        if user_input in ["1", "countdown"]:
+            countdown_timer()
+        else:
+            input("Invalid input.")
+            clear_screen()
+
+
+
+application()
 
 
 
