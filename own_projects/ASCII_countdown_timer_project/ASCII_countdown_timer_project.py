@@ -1,7 +1,6 @@
 # countdown timer with ascii art project!
 import time
 import os
-from array import ArrayType
 
 
 # from colorama import Fore, init
@@ -15,15 +14,15 @@ def clear_screen():
 def ascii_art(character):  # , font type
 
     numbers = {
-        "0":
-            r"""   
-               ___  
-              / _ \ 
-             | | | |
-             | |_| |
-              \___/ 
-            """,
-        "1": r"""   
+"0":
+r"""   
+   ___  
+  / _ \ 
+ | | | |
+ | |_| |
+  \___/ 
+""",
+"1": r"""   
   _ 
  / |
  | |
@@ -95,16 +94,31 @@ def ascii_art(character):  # , font type
     /_/  
        """,
         "spacing":
-            r"""
-              _ 
-             (_)
-            
-              _ 
-             (_)
-            
-            """}
+r"""
+  _ 
+ (_)
+    
+  _ 
+ (_)
+"""}
 
     return numbers[character]  # [fonttypeindex]
+
+
+
+def get_hours():
+    while True:
+        user_input = input("How many hours?\n> ")
+        try:
+            user_input = int(user_input)
+            if 59 >= user_input >= 0:
+                return user_input
+            else:
+                print("Invalid input (Enter a number between 0 - 59)\nPress \"Enter\" to continue.")
+
+        except ValueError:
+            input("Invalid input (Enter a number)\nPress \"Enter\" to continue.")
+
 
 
 # asks for and returns the user inputted minutes
@@ -113,7 +127,7 @@ def get_minutes():
         user_input = input("How many minutes?\n> ")
         try:
             user_input = int(user_input)
-            if user_input < 59:
+            if 59 >= user_input >= 0:
                 return user_input
             else:
                 print("Invalid input (Enter a number between 0 - 59)\nPress \"Enter\" to continue.")
@@ -129,10 +143,10 @@ def get_seconds():
 
         try:
             user_input = int(user_input)
-            if user_input < 3600:
+            if 59 >= user_input >= 0:
                 return user_input
             else:
-                print("Invalid input (Enter a number between 0 - 3600)\nPress \"Enter\" to continue.")
+                print("Invalid input (Enter a number between 0 - 59)\nPress \"Enter\" to continue.")
 
         except ValueError:
             input("Invalid input (Enter a number)\nPress \"Enter\" to continue.")
@@ -141,7 +155,8 @@ def get_seconds():
 # countdown using all the previous functions
 def countdown_timer():
     # calculates total time and converts
-    time_in_seconds = get_minutes() * 60 + get_seconds()
+    time_in_seconds = get_hours() * 3600 + get_minutes() * 60 + get_seconds()
+    hours = time_in_seconds // 3600
     minutes = time_in_seconds // 60
     seconds = time_in_seconds % 60
 
@@ -150,20 +165,17 @@ def countdown_timer():
 
         # countdown logic
         if seconds == -1:
-            minutes -= 1
-            seconds += 60
+            minutes, seconds = divmod(i, 60)
+            hours, minutes = divmod(minutes, 60)
 
         # what the user sees
-        display = ascii_art(str(minutes).zfill(2)[0]), ascii_art(str(minutes).zfill(2)[1]), ascii_art(
-            "spacing"), ascii_art(str(seconds).zfill(2)[0]), ascii_art(str(seconds).zfill(2)[1])
+        display = ascii_art(str(hours).zfill(2)[0]), ascii_art(str(hours).zfill(2)[1]), ascii_art("spacing"),ascii_art(str(minutes).zfill(2)[0]), ascii_art(str(minutes).zfill(2)[1]), ascii_art("spacing"), ascii_art(str(seconds).zfill(2)[0]), ascii_art(str(seconds).zfill(2)[1])
 
         # prints the ascii art next to each other
         for number in zip(*(number.splitlines() for number in display)):
             print("".join(number))
 
-        # if both are 0 print message, could add sound in the future
-        if 0 == minutes == seconds:
-            input("time's up!")  # possible alarm
+
 
         # countdown logic and clear screen
         seconds -= 1
