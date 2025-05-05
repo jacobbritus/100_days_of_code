@@ -1,0 +1,250 @@
+#03-05-2024
+
+i started by generating numbers 0-9 in ASCII art
+
+i matched all of them with the normal ones
+
+i tested a normal countdown using range()
+
+i tried printing the ASCII art next to each other but failed and failed
+i gave up trying myself after some minutes
+i looked up how to do it:
+for a, b in zip(numbers[0].split("\n"), numbers[1].split("\n")):
+      print(f"{a}{b}")
+
+i learned how it works and learned about zip() and splitlines()
+
+i made a countdown timer with max 99 seconds
+
+it wasn't difficult at all, i used a while loop that goes till 0
+
+#04-05-2024
+
+07:44
+continuing now with getting minutes in.
+
+i was able to get things like (5.5 minutes) converted to minutes = 5 and seconds is 30
+
+print(minutes)
+print(seconds)
+
+total_seconds = minutes * 60 + seconds
+
+print(total_seconds)
+
+#success
+
+for i in range(0, total_seconds):
+    if seconds == -1:
+        seconds += 60
+        minutes -= 1
+
+    if seconds < 10:
+        print(f"{minutes}:0{seconds}")
+    else:
+        print(f"{minutes}:{seconds}")
+    seconds -= 1
+    time.sleep(0.3)
+
+    # gotta seperate the numbers into their own digits
+
+
+
+10:00
+it works now, it was difficult but worth it
+
+- enter minutes (under 10 for now)
+- enter seconds
+- ascii letters countdown (5:30 > clear screen 5:29 clear screen ...)
+
+i first want to get better at error handling input honestly
+so i will research ways to get better at that
+and add it so that this code won't produce errors.
+
+after that, i'll add entering minutes till 59
+
+
+14:00
+
+im continuing now
+
+i will improve the input() to handle potential errors.
+
+
+while True:
+    user_input_minutes = input("how many minutes?\n>")
+
+    if user_input_minutes.isdigit():
+        user_input_minutes = int(user_input_minutes)
+
+        if 59 > user_input_minutes >= 0:
+            break
+        else:
+            print("Invalid input. (Enter a number between 0 - 59")
+    else:
+        print("Invalid input. (Enter a number between 0 - 59")
+
+
+minutes = user_input_minutes
+user_input_seconds = input("how many seconds?\n>")
+
+
+
+first_number = 0
+
+try:
+    first_number = int(user_input_seconds[0])
+    second_number = int(user_input_seconds[1])  # 0
+except IndexError:
+    second_number = first_number
+    first_number = 0
+
+total_ticks = minutes * 60 + int(user_input_seconds)
+
+for i in range(0, total_ticks):
+
+    if second_number == -1:
+        first_number -= 1
+        second_number += 10
+
+    if first_number == -1:
+        minutes -= 1
+        first_number += 6
+
+    display = numbers[minutes], spacing, numbers[first_number], numbers[second_number]
+
+    print("_________________________________")
+    for number in zip(*(number.splitlines() for number in display)):
+        print("".join(number))
+    print("_________________________________")
+    second_number -= 1
+    time.sleep(0.5)
+    clear_screen()
+
+
+i added two checks for the minutes and seconds input:
+- check if input is a digit
+- check if input between 0 and 59
+
+i added a fourth digit allowing users to use double digit minutes.
+
+i had to debug the fourth number as it didnt work at first
+
+there was an issue for if the input for minutes was single digit
+
+cuz that means that the third digit would cause an index error since it's numbers[1]
+
+i added a try except, if value error then third becomes fourth and fourth is 0
+
+i gotta make the inputs as functions honestly
+
+cuz if both are 0, the program just ends.
+
+15:38
+users can input more than 60 seconds now
+i can't lie, this one was difficult
+i still don't fully understand what i did i think
+since it learned through trial and error
+
+i wanna add fonts later:
+########################
+- numbers[digit][font_name]
+
+numbers would get stored like:
+numbers: {0:{"""
+    ART1
+    """,
+    """
+ART2
+    """,
+
+so to get 0 in the second ascii art font style:
+- numbers[0][1]
+it'd be like this though
+- numbers[digit][font_number]
+
+########################################
+
+i also want to add colors, it'd be pretty easy i think
+
+i'll get started on improving the front end design tomorrow
+i'll also make everything into functions
+
+05-05-2025
+
+6:58
+im gonna refactor the whole thing
+
+the way input works
+
+the functions
+
+etc
+
+
+1. get_minutes()
+asks for minute amount
+error handling
+returns minutes
+
+2. get_seconds()
+asks for seconds amount
+error handling
+returns seconds
+
+3. digit_converter()
+gets total amount of time in seconds
+
+minutes is total in seconds // 60
+seconds is total in seconds % 60
+
+convert both to str and .zfill() - new thing learnt btw, it fills str with 0s. useful in this situation as if minutes or seconds is a single digit, no index error would be caused
+
+four digits take in minutes[index] or seconds[index]
+
+return the four digits
+
+4. countdown timer logic
+
+im gonna look up how to properly countdown as my previous one wasn't using any functions
+
+5. turn into ascii art using function
+ascii_art(character)
+
+complete!
+08:36
+
+i was looking up ways on how to make a timer
+and then it came up to me:
+if seconds == -1:
+    minutes -= 1
+    seconds + 60
+
+seconds -= 1
+time.sleep(1)
+
+boom now i know how to make a timer
+
+in between though,
+- display = ascii_art(str(minutes[0]).zfill), ascii_art(str(minutes[0]).zfill), ascii_art(str(minutes[0]).zfill), ascii_art(str(minutes[0]).zfill), ascii_art(str(minutes[0]).zfill)
+
+
+i was worrying about adding hours before but now with this, it shouldn't be hard
+
+
+im feeling happy honestly,
+
+i was worrying a lot yesterday as i was tired and my code looked very messy,
+but now it looks very clean, is concise and the flow is better.
+i added functions for everything,
+and now im able to add in hours and days easily!!!
+
+so im feeling good and realize that some issues just take a step back and a reflection.
+i woke up in the morning drank some coffee, and my mind just started solving the problem.
+
+future plans:
+0. title screen and options menu
+2. settings menu
+1. choosing color option (im excited for this ones logic
+2. choosing font option
+3. hours

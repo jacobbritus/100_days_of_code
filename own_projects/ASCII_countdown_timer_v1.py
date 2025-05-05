@@ -1,6 +1,8 @@
 # countdown timer with ascii art project!
 import time
 import os
+
+
 # from colorama import Fore, init
 # init(autoreset=True)
 
@@ -93,12 +95,11 @@ numbers = {
 spacing = r"""
   _ 
  (_)
-    
+
   _ 
  (_)
 
 """
-
 
 # getting minutes
 while True:
@@ -108,7 +109,6 @@ while True:
 
         if 59 > user_input_minutes >= 0:
             user_input_minutes = str(user_input_minutes)
-
 
             try:
                 third_digit = int(user_input_minutes[1])
@@ -125,8 +125,7 @@ while True:
         input("Invalid input (Enter a number between 0 - 59)")
     clear_screen()
 
-
-#getting seconds
+# getting seconds
 while True:
     user_input_seconds = input("how many seconds?\n> ")
     if user_input_seconds.isdigit():
@@ -156,15 +155,12 @@ while True:
             print(seconds)
             input()
 
-
-
             try:
                 second_digit = int(seconds[0])
                 first_digit = int(seconds[1])  #
             except IndexError:
                 first_digit = int(seconds[0])
                 second_digit = 0
-
 
             try:
 
@@ -180,8 +176,6 @@ while True:
             except IndexError:
                 third_digit += int(minutes[0])
 
-
-
             break
 
 
@@ -196,18 +190,8 @@ while True:
         input("Invalid input (Enter a number between 0 - 59)")
     clear_screen()
 
-
-
-
-
-
-
-
-
 if int(user_input_seconds) == 0 and int(user_input_minutes) == 0:
     input("The timer is starts at 0. Bye.")
-
-
 
 # the countdown timer
 total_ticks = int(user_input_minutes) * 60 + int(user_input_seconds) + 1
@@ -437,7 +421,5 @@ spacing = r"""
 #     time.sleep(0.3)
 
 
-
 # succes
-
 
