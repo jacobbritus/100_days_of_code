@@ -16,91 +16,73 @@ def clear_screen():
 def ascii_art(character):  # , font type
 
     numbers = {
-"0":
-r"""   
-   ___  
-  / _ \ 
- | | | |
- | |_| |
-  \___/ 
-""",
-"1": r"""   
-  _ 
- / |
- | |
- | |
- |_|
-       """,
-        "2": r"""   
-  ____   
+"0":r"""   ___   
+  / _ \  
+ | | | | 
+ | |_| | 
+  \___/  """,
+"1": r"""    _    
+   / |   
+   | |   
+   | |   
+   |_|   """,
+"2": r"""  ____   
  |___ \  
    __) | 
   / __/  
- |_____| 
-       """,
+ |_____| """,
+"3": r"""  _____  
+ |___ /  
+   |_ \  
+  ___) | 
+ |____/  """,
 
-        "3": r"""   
-  _____ 
- |___ / 
-   |_ \ 
-  ___) |
- |____/ 
-       """,
-
-        "4": r"""   
-  _  _   
+"4": r"""  _  _   
  | || |  
  | || |_ 
  |__   _|
-    |_|  
-       """,
+    |_|  """,
 
-        "5": r"""   
-  ____  
- | ___| 
- |___ \ 
-  ___) |
- |____/ 
-       """,
+"5": r"""  ____   
+ | ___|  
+ |___ \  
+  ___) | 
+ |____/  """,
 
-        "6": r"""   
-   __   
-  / /_  
- | '_ \ 
- | (_) |
-  \___/ 
-       """,
+"6": r"""   __    
+  / /_   
+ | '_ \  
+ | (_) | 
+  \___/  """,
 
-        "7": r"""   
-  _____ 
- |___  |
-    / / 
-   / /  
-  /_/   
-       """,
+"7": r"""  _____  
+ |___  | 
+    / /  
+   / /   
+  /_/    """,
 
-        "8": r"""   
-   ___  
-  ( _ ) 
-  /|_|\ 
- | (_) |
-  \___/ 
-       """,
+"8": r"""   ___   
+  ( _ )  
+  / _ \  
+ | (_) | 
+  \___/  """,
 
-        "9": r"""   
-   ___  
-  / _ \ 
- | (_) |
-  \__, |
-    /_/ 
-       """,
-        ":": r"""
-  _ 
+"9": r"""   ___   
+  / _ \  
+ | (_) | 
+  \__, | 
+    /_/  """,
+":": r"""  _ 
  (_)
     
   _ 
- (_)
-"""}
+ (_)""",
+"│": r"""│
+│
+│
+│
+│
+│"""}
 
     return numbers[character]  # [fonttypeindex]
 
@@ -200,6 +182,7 @@ def countdown_timer():
 
 
         colon = ascii_art(":")
+        line = ascii_art("│")
         # assigning hour digits
         hour_tens = ascii_art(str(hours).zfill(2)[0])
         hour_units = ascii_art(str(hours).zfill(2)[1])
@@ -212,29 +195,35 @@ def countdown_timer():
 
 
         # what the user sees
-        display = hour_tens, hour_units, colon, minute_tens, minute_units, colon, second_tens, second_units
+        display =  line, hour_tens, hour_units, colon, minute_tens, minute_units, colon, second_tens, second_units, line
+
+
 
         # prints the ascii art next to each other
-        for number in zip(*(number.splitlines() for number in display)):
-            print(color + "".join(number))
 
+        print("\033[H", end="")
+        print(color + "┌" + 62 * "─" + "┐")
+        output = ""
+        for number in zip(*(number.splitlines() for number in display)):
+            output += (color + "".join(number) + "\n")
+
+        output = output.rstrip("\n")
+        print(output)
+        print(color + "└" + 62 * "─" + "┘")
         # countdown logic and clear screen
         seconds -= 1
         time.sleep(1)
-        clear_screen()
+
 
     input("time's up!")  # possible alarm
+    clear_screen()
 
 
-# top = "┌" + "─" * (box_width - 2) + "┐"
-# bottom = "└" + "─" * (box_width - 2) + "┘"
-# middle = "│" + " " * (box_width - 2) + "│"
 
 
 def logo():
     return(
-        r"""
-┌─────────────────────────────────────────────────┐
+        r"""┌─────────────────────────────────────────────────┐
 │     __  __      _____ _                         │
 │    |  \/  |_   |_   _(_)_ __ ___   ___ _ __     │
 │    | |\/| | | | || | | | '_ ` _ \ / _ \ '__|    │
@@ -248,26 +237,35 @@ def scrolling_text(sentence):
         sys.stdout.write(color + character)
         sys.stdout.flush()
         time.sleep(0.01)
-    print(color + "\n│ Press \"Enter\" to start.                         │")
-    input(color + "└" + 49 * "─" + "┘")
+    # print(color + "\n│ Press \"Enter\" to start.                         │")
+    # input(color + "└" + 49 * "─" + "┘")
     clear_screen()
 
 
 
 def menu_options(menu_type):
+    global menu_display
+
+
 
 
     if menu_type =="main_menu":
+        menu_display = "Main Menu"
+        print(color + f"│{menu_display} {" " * (48 - len(menu_display))}│")
         print(color + "│ [1] Start                                       │")
         print(color + "│ [2] Settings                                    │")
         print(color + "│ [3] Exit                                        │")
         print(color + "└" + 49 * "─" + "┘")
     elif menu_type =="settings_menu":
+        menu_display = "< Main Menu"
+        print(color + f"│{menu_display} {" " * (48 - len(menu_display))}│")
         print(color + "│ [1] Change Font                                 │")
         print(color + "│ [2] Change Color                                │")
         print(color + "│ [3] Back                                        │")
         print(color + "└" + 49 * "─" + "┘")
-    else:
+    elif menu_type == "color_menu":
+        menu_display = "< Settings Menu"
+        print(color + f"│{menu_display} {" " * (48 - len(menu_display))}│")
         print(color + f"│ {(Fore.RED + "[1] Red")}                                         {color + "│"}")
         print(color + f"│ {Fore.GREEN + "[2] Green"}                                       {color + "│"}")
         print(color + f"│ {Fore.YELLOW + "[3] Yellow"}                                      {color + "│"}")
@@ -276,80 +274,131 @@ def menu_options(menu_type):
         print(color + f"│ {Fore.CYAN + "[6] Cyan"}                                        {color + "│"}")
         print(color + f"│ {Fore.WHITE + "[7] Exit"}                                        {color + "│"}")
         print(color + "└" + 49 * "─" + "┘")
+    elif menu_type == "clock_menu":
+        menu_display = "< Main Menu"
+        print(color + f"│{menu_display} {" " * (48 - len(menu_display))}│")
+        print(color + "│ [1] Count Up                                    │")
+        print(color + "│ [2] Count Down                                  │")
+        print(color + "│ [3] Back                                        │")
+        print(color + "└" + 49 * "─" + "┘")
+
+def choice_handling():
+    global current_menu, color
+    while True:
+        user_input = input(color + "> ").strip().lower()
+        clear_screen()
+
+        if current_menu == "main_menu":
+            if user_input == "1":
+                current_menu = "clock_menu"
+            elif user_input == "2":
+                current_menu = "settings_menu"
+            elif user_input == "3":
+                exit() # gotta make a function for this still
+
+        elif current_menu == "settings_menu":
+            if user_input == "1":
+                ...
+            elif user_input == "2":
+                current_menu = "color_menu"
+            elif user_input == "3":
+                current_menu = "main_menu"
+        elif current_menu == "color_menu":
+            if user_input in ["1"]:
+                color = Fore.RED
+            elif user_input in ["2"]:
+                color = Fore.GREEN
+            elif user_input in ["3"]:
+                color = Fore.YELLOW
+            elif user_input in ["4"]:
+                color = Fore.BLUE
+            elif user_input in ["5"]:
+                color = Fore.MAGENTA
+            elif user_input in ["6"]:
+                color = Fore.CYAN
+            elif user_input == "7":
+                current_menu = "settings_menu"
+        elif current_menu == "clock_menu":
+            if user_input == "1":
+                countup_timer()
+            elif user_input == "2":
+                countdown_timer()
+            elif user_input == "3":
+                current_menu = "main_menu"
+        else:
+            input("Invalid input.")
+        clear_screen()
+        break
+
 
 
 def application():
-    global color, current_menu
+    global color, current_menu, menu_display
     color = Fore.WHITE
 
     current_menu = "main_menu"
-    scrolling_text(logo())
+    menu_display = "Main Menu"
+    # scrolling_text(logo())
 
     while True:
         print(color + logo())
         menu_options(current_menu)
-        user_input = input(color + "> ").strip().lower()
-        clear_screen()
+        choice_handling()
+
+def countup_timer():
+    # calculates total time and converts
+
+    hours = 0
+    minutes = 0
+    seconds = 0
 
 
-        if user_input in ["1", "countdown"]:
-            if current_menu == "main_menu":
-                countdown_timer()
-            else:
-                ...
-
-        elif user_input in ["2", "settings"]:
-            if current_menu == "main_menu":
-                current_menu = "settings_menu"
-            else:
-
-                get_color()
-                current_menu = "settings_menu"
-                clear_screen()
-
-        elif user_input == "3":
-            if current_menu == "main_menu":
-                exit()
-            else:
-                current_menu = "main_menu"
-
-        else:
-            input("Invalid input.")
-            clear_screen()
-            current_menu = "main_menu"
-
-
-
-def get_color():
-    global color, current_menu
-    current_menu = "color_menu"
-    print(color + logo())
-    menu_options(current_menu)
-
-
-
-    user_input = input(color + "> ").strip().lower()
-
+    # the timer itself
     while True:
-        if user_input in ["1"]:
-            color = Fore.RED
-        elif user_input in ["2"]:
-            color = Fore.GREEN
-        elif user_input in ["3"]:
-            color = Fore.YELLOW
-        elif user_input in ["4"]:
-            color = Fore.BLUE
-        elif user_input in ["5"]:
-            color = Fore.MAGENTA
-        elif user_input in ["6"]:
-            color = Fore.CYAN
-        elif user_input == "7":
-            return
+
+        # countdown logic
+        if seconds >= 60:
+            minutes, seconds = divmod(seconds, 60)
+            hours, minutes = divmod(minutes, 60)
 
 
-        else:
-            input("Invalid input.")
-        return
+
+        colon = ascii_art(":")
+        line = ascii_art("│")
+        # assigning hour digits
+        hour_tens = ascii_art(str(hours).zfill(2)[0])
+        hour_units = ascii_art(str(hours).zfill(2)[1])
+        # assigning minute digits
+        minute_tens = ascii_art(str(minutes).zfill(2)[0])
+        minute_units = ascii_art(str(minutes).zfill(2)[1])
+        # assigning digits
+        second_tens = ascii_art(str(seconds).zfill(2)[0])
+        second_units = ascii_art(str(seconds).zfill(2)[1])
+
+
+        # what the user sees
+        display =  line, hour_tens, hour_units, colon, minute_tens, minute_units, colon, second_tens, second_units, line
+
+
+
+        # prints the ascii art next to each other
+
+        print("\033[H", end="")
+        print(color + "┌" + 62 * "─" + "┐")
+        output = ""
+        for number in zip(*(number.splitlines() for number in display)):
+            output += (color + "".join(number) + "\n")
+
+        output = output.rstrip("\n")
+        print(output)
+        print(color + "└" + 62 * "─" + "┘")
+        # countdown logic and clear screen
+        seconds += 1
+        time.sleep(1)
+
+
+
+
 
 
 application()
@@ -360,4 +409,7 @@ application()
 
 
 
+# top = "┌" + "─" * (box_width - 2) + "┐"
+# bottom = "└" + "─" * (box_width - 2) + "┘"
+# middle = "│" + " " * (box_width - 2) + "│"
 
