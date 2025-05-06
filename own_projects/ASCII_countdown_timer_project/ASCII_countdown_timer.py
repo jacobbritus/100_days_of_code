@@ -1,10 +1,12 @@
 # countdown timer with ascii art project!
-import time
 import os
+import time
+import sys
+sys.stdout.reconfigure(encoding="utf-8")
 
+from colorama import Fore, init
 
-# from colorama import Fore, init
-# init(autoreset=True)
+init(autoreset=True)
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
@@ -35,7 +37,6 @@ r"""
    __) | 
   / __/  
  |_____| 
-
        """,
 
         "3": r"""   
@@ -91,10 +92,9 @@ r"""
   / _ \ 
  | (_) |
   \__, |
-    /_/  
+    /_/ 
        """,
-        ":":
-r"""
+        ":": r"""
   _ 
  (_)
     
@@ -106,9 +106,19 @@ r"""
 
 
 
+
 def get_hours():
+
     while True:
-        user_input = input("How many hours?\n> ")
+        print(logo())
+        print(color + "│ How many hours? (Press \"Enter\" to go back)      │")
+        user_input = input(color + "└" + 49 * "─" + "┘\n")
+        clear_screen()
+
+
+        if user_input == "":
+            break
+
         try:
             user_input = int(user_input)
             if 59 >= user_input >= 0:
@@ -121,14 +131,22 @@ def get_hours():
 
 
 
+
 # asks for and returns the user inputted minutes
 def get_minutes():
     while True:
-        user_input = input("How many minutes?\n> ")
+        print(logo())
+        print(color + "│ How many minutes? (Press \"Enter\" to go back)    │")
+        user_input = input(color + "└" + 49 * "─" + "┘\n")
+        clear_screen()
+
+        if user_input == "":
+            break
         try:
             user_input = int(user_input)
             if 59 >= user_input >= 0:
                 return user_input
+
             else:
                 print("Invalid input (Enter a number between 0 - 59)\nPress \"Enter\" to continue.")
 
@@ -139,8 +157,13 @@ def get_minutes():
 # asks for and returns the user inputted seconds
 def get_seconds():
     while True:
-        user_input = input("How many seconds?\n> ")
+        print(logo())
+        print(color + "│ How many seconds? (Press \"Enter\" to go back)    │")
+        user_input = input(color + "└" + 49 * "─" + "┘\n")
+        clear_screen()
 
+        if user_input == "":
+            break
         try:
             user_input = int(user_input)
             if 59 >= user_input >= 0:
@@ -155,18 +178,26 @@ def get_seconds():
 # countdown using all the previous functions
 def countdown_timer():
     # calculates total time and converts
-    time_in_seconds = get_hours() * 3600 + get_minutes() * 60 + get_seconds()
+    try:
+        time_in_seconds = get_hours() * 3600 + get_minutes() * 60 + get_seconds()
+    except TypeError:
+        clear_screen()
+        return
+
     hours = time_in_seconds // 3600
-    minutes = time_in_seconds // 60
-    seconds = time_in_seconds % 60
+    minutes = hours // 60
+    seconds = minutes // 60
+    clear_screen()
 
     # the timer itself
     for i in range(time_in_seconds, -1, -1):
 
         # countdown logic
-        if seconds == -1:
+        if seconds >= -1:
             minutes, seconds = divmod(i, 60)
             hours, minutes = divmod(minutes, 60)
+
+
 
         colon = ascii_art(":")
         # assigning hour digits
@@ -179,12 +210,13 @@ def countdown_timer():
         second_tens = ascii_art(str(seconds).zfill(2)[0])
         second_units = ascii_art(str(seconds).zfill(2)[1])
 
+
         # what the user sees
         display = hour_tens, hour_units, colon, minute_tens, minute_units, colon, second_tens, second_units
 
         # prints the ascii art next to each other
         for number in zip(*(number.splitlines() for number in display)):
-            print("".join(number))
+            print(color + "".join(number))
 
         # countdown logic and clear screen
         seconds -= 1
@@ -194,48 +226,133 @@ def countdown_timer():
     input("time's up!")  # possible alarm
 
 
-
+# top = "┌" + "─" * (box_width - 2) + "┐"
+# bottom = "└" + "─" * (box_width - 2) + "┘"
+# middle = "│" + " " * (box_width - 2) + "│"
 
 
 def logo():
-    print(r"""
-     _    ____   ____ ___ ___      _    ____ _____   _____ ___ __  __ _____ ____  
-    / \  / ___| / ___|_ _|_ _|    / \  |  _ \_   _| |_   _|_ _|  \/  | ____|  _ \ 
-   / _ \ \___ \| |    | | | |    / _ \ | |_) || |     | |  | || |\/| |  _| | |_) |
-  / ___ \ ___) | |___ | | | |   / ___ \|  _ < | |     | |  | || |  | | |___|  _ < 
- /_/   \_\____/ \____|___|___| /_/   \_\_| \_\|_|     |_| |___|_|  |_|_____|_| \_\                          
-    """)
+    return(
+        r"""
+┌─────────────────────────────────────────────────┐
+│     __  __      _____ _                         │
+│    |  \/  |_   |_   _(_)_ __ ___   ___ _ __     │
+│    | |\/| | | | || | | | '_ ` _ \ / _ \ '__|    │
+│    | |  | | |_| || | | | | | | | |  __/ |       │
+│    |_|  |_|\__, ||_| |_|_| |_| |_|\___|_|       │
+│            |___/                                │
+├─────────────────────────────────────────────────┤""")
+
+def scrolling_text(sentence):
+    for character in sentence:
+        sys.stdout.write(color + character)
+        sys.stdout.flush()
+        time.sleep(0.01)
+    print(color + "\n│ Press \"Enter\" to start.                         │")
+    input(color + "└" + 49 * "─" + "┘")
+    clear_screen()
 
 
-def menu_options():
-    print(85 * "─")
-    print("1. Countdown")
-    print("2. Settings (COMING SOON)")
-    print(25 * "─")
+
+def menu_options(menu_type):
+
+
+    if menu_type =="main_menu":
+        print(color + "│ [1] Start                                       │")
+        print(color + "│ [2] Settings                                    │")
+        print(color + "│ [3] Exit                                        │")
+        print(color + "└" + 49 * "─" + "┘")
+    elif menu_type =="settings_menu":
+        print(color + "│ [1] Change Font                                 │")
+        print(color + "│ [2] Change Color                                │")
+        print(color + "│ [3] Back                                        │")
+        print(color + "└" + 49 * "─" + "┘")
+    else:
+        print(color + f"│ {(Fore.RED + "[1] Red")}                                         {color + "│"}")
+        print(color + f"│ {Fore.GREEN + "[2] Green"}                                       {color + "│"}")
+        print(color + f"│ {Fore.YELLOW + "[3] Yellow"}                                      {color + "│"}")
+        print(color + f"│ {Fore.BLUE + "[4] Blue"}                                        {color + "│"}")
+        print(color + f"│ {Fore.MAGENTA + "[5] Magenta"}                                     {color + "│"}")
+        print(color + f"│ {Fore.CYAN + "[6] Cyan"}                                        {color + "│"}")
+        print(color + f"│ {Fore.WHITE + "[7] Exit"}                                        {color + "│"}")
+        print(color + "└" + 49 * "─" + "┘")
 
 
 def application():
+    global color, current_menu
+    color = Fore.WHITE
+
+    current_menu = "main_menu"
+    scrolling_text(logo())
 
     while True:
-        logo()
-        menu_options()
-        user_input = input("> ").strip().lower()
+        print(color + logo())
+        menu_options(current_menu)
+        user_input = input(color + "> ").strip().lower()
         clear_screen()
 
+
         if user_input in ["1", "countdown"]:
-            countdown_timer()
+            if current_menu == "main_menu":
+                countdown_timer()
+            else:
+                ...
+
+        elif user_input in ["2", "settings"]:
+            if current_menu == "main_menu":
+                current_menu = "settings_menu"
+            else:
+
+                get_color()
+                current_menu = "settings_menu"
+                clear_screen()
+
+        elif user_input == "3":
+            if current_menu == "main_menu":
+                exit()
+            else:
+                current_menu = "main_menu"
+
         else:
             input("Invalid input.")
             clear_screen()
+            current_menu = "main_menu"
 
+
+
+def get_color():
+    global color, current_menu
+    current_menu = "color_menu"
+    print(color + logo())
+    menu_options(current_menu)
+
+
+
+    user_input = input(color + "> ").strip().lower()
+
+    while True:
+        if user_input in ["1"]:
+            color = Fore.RED
+        elif user_input in ["2"]:
+            color = Fore.GREEN
+        elif user_input in ["3"]:
+            color = Fore.YELLOW
+        elif user_input in ["4"]:
+            color = Fore.BLUE
+        elif user_input in ["5"]:
+            color = Fore.MAGENTA
+        elif user_input in ["6"]:
+            color = Fore.CYAN
+        elif user_input == "7":
+            return
+
+
+        else:
+            input("Invalid input.")
+        return
 
 
 application()
-
-
-
-
-
 
 
 
