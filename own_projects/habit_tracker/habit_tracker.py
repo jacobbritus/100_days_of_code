@@ -17,12 +17,7 @@ STREAK_TO_BOX = 20
 SPACE_BETWEEN_MARKS = 6
 
 
-habits_list = {
-    "Exercise": {
-        "marks":["[O]" + " " * SPACE_BETWEEN_MARKS]* 7,
-    "streak": 0,
-    "marked_dates": []}
-}
+habits_list = {}
 
 
 
@@ -44,52 +39,70 @@ monday = now - timedelta(weekdaynow)
 week_in_datetime = [monday + timedelta(i) for i in range(7)]
 
 #prints everything in the week's day's number (01) and day (monday).
-week_numbers_display = [day.strftime("%d") if not day.weekday() == now.weekday() else Fore.YELLOW + day.strftime("%d") + Fore.RESET for day in week_in_datetime]
+week_numbers_display = [Fore.LIGHTBLACK_EX + day.strftime("%d") + Fore.RESET if not day.weekday() == now.weekday() else Fore.WHITE + day.strftime("%d") + Fore.RESET for day in week_in_datetime]
 # week_days = [day.strftime("%a") for day in week_in_datetime]
 
-week_days_display = [day.strftime("%a") if not day.weekday() == now.weekday() else Fore.YELLOW + day.strftime("%a") + Fore.RESET for day in week_in_datetime]
+week_days_display = [Fore.LIGHTBLACK_EX + day.strftime("%a") + Fore.RESET if not day.weekday() == now.weekday() else Fore.WHITE + day.strftime("%a") + Fore.RESET for day in week_in_datetime]
 
 
 # print("  ".join(week_numbers_display))
 # print(" ".join(week_days_display))
 
-
-
+# when saving is added:
+# if day_date(TURN TO FULL DATE TO ALSO CHECK IF EQUAL MONTH AND YEAR) in [d.date() for d in habits_list[habit]["marked_dates"]
+# if yes make get it's index and then  habits_list[habit]["marks"][day_date_index] = Fore.GREEN + "[X]" + Fore.RESET + " " * SPACE_BETWEEN_MARKS
+# either get the index from list or from turning it into .weekday
 
 # display habits
 def display():
     global habits_list
 
-    print("┌" + "─" * (BOX_LENGTH + 1) + "┐")
-    print(f"│{" ".ljust(STREAK_TO_BOX)}{"       ".join(week_numbers_display).ljust(BOX_LENGTH + 11 - STREAK_TO_BOX)}│")
-    print(f"│{" ".ljust(STREAK_TO_BOX)}{"      ".join(week_days_display).ljust(BOX_LENGTH + 11 - STREAK_TO_BOX)}│")
-    print("├" + "─" * (BOX_LENGTH + 1) + "┤")
-    for index, habit in enumerate(habits_list):
-        print("│" + str(habits_list[habit]["streak"]).ljust(STREAK_TO_BOX) + "".join(habits_list[habit]["marks"]).ljust(BOX_LENGTH - STREAK_TO_BOX)  + "│")  #streak to be added still
-        print("│" + Fore.GREEN + habit.ljust(BOX_LENGTH + 1) + Fore.RESET + "│")
+    if habits_list:
+        # print("┌" + "─" * (BOX_LENGTH + 1) + "┐")
+        # print(f"│{now.strftime("%B").ljust(STREAK_TO_BOX)}{"       ".join(week_numbers_display).ljust(BOX_LENGTH + 15 - STREAK_TO_BOX)}       │")
+        # print(f"│{" ".ljust(STREAK_TO_BOX)}{"      ".join(week_days_display).ljust(BOX_LENGTH + 15 - STREAK_TO_BOX)}      │")
+        # print("└" + "─" * (BOX_LENGTH + 1) + "┘")
+        print(f"{now.strftime("%B").ljust(STREAK_TO_BOX)}{"        ".join(week_numbers_display).ljust(BOX_LENGTH + 15 - STREAK_TO_BOX)}       ")
+        print(f"{" ".ljust(STREAK_TO_BOX)}{"       ".join(week_days_display).ljust(BOX_LENGTH + 15 - STREAK_TO_BOX)}      ")
 
 
-        print("├" + "─" * (BOX_LENGTH + 1) + "┤")
+        for index, habit in enumerate(habits_list):
+            print("┌" + "─" * (BOX_LENGTH + 1) + "┐")
+            print("│" + str(habits_list[habit]["streak"]).ljust(STREAK_TO_BOX) + "".join(habits_list[habit]["marks"]).ljust(BOX_LENGTH - STREAK_TO_BOX)  + "│")  #streak to be added still
+            print("│" + habit.ljust(BOX_LENGTH + 1) + "│")
+            print("└" + "─" * (BOX_LENGTH + 1) + "┘")
 
+# adding new habits
+def adding_habits():
+    global habits_list
 
+    print("Enter the new habit's name")
+    habit = input("> ")
 
+    habits_list.update({habit: {"marks": ["[O]" + " " * SPACE_BETWEEN_MARKS] * 7,"streak": 0,"marked_dates": []}})
 
-def adding():
+# logging habits
+def logging():
     global habits_list
 
     habit = input("Which habit?")
-    day = int(input("What day")) - 1
+    day = now.weekday()
 
 
     habits_list[habit]["marks"][day] = Fore.GREEN + "[X]" + Fore.RESET + " " * SPACE_BETWEEN_MARKS
     habits_list[habit]["streak"] += 1
+    habits_list[habit]["marked_dates"].append(now)
+
+#menu
+def menu(message):
 
 
+    print(message)
+    print("┌" + "─" * (BOX_LENGTH + 1) + "┐")
+    print(f"│ [1] Log{" " * 59}[3] Edit Habits │")
+    print(f"│ [2] New Habit{" " * 53}[4] Settings    │")
+    print("└" + "─" * (BOX_LENGTH + 1) + "┘")
 
-
-def menu():
-    print(f"│ [1] Log{" " * 60}[2] Settings   │")
-    print( "└" + "─" * (BOX_LENGTH + 1) + "┘")
 
 
 
@@ -139,10 +152,52 @@ def random_quote():
     print(random.choice(quotes))
 
 
-while True:
-    logo()
-    random_quote()
-    display()
-    menu()
-    adding()
-    clear_terminal()
+def main():
+    global current_menu
+
+    current_menu = "main_menu"
+
+    while True:
+        logo()
+        menu(random_quote())
+        display()
+        get_user_input()
+        clear_terminal()
+
+
+
+        clear_terminal()
+
+
+
+def get_user_input():
+
+    user_input = input("> ")
+
+    if user_input == "1":
+        logging()
+    elif user_input == "2":
+        adding_habits()
+    elif user_input == "3":
+        ...#
+    elif user_input == "4":
+        ...
+    else:
+        input("Invalid input (Press \"Enter\" to continue.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+main()
