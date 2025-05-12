@@ -10,8 +10,7 @@ def logo():
     print(r""" _         _   _           
 | |__  ___| |_| |_ ___ _ _ 
 | '_ \/ -_)  _|  _/ -_) '_|
-|_.__/\___|\__|\__\___|_|  
-""")
+|_.__/\___|\__|\__\___|_|  """)
 BOX_LENGTH = 82
 STREAK_TO_BOX = 20
 SPACE_BETWEEN_MARKS = 6
@@ -67,41 +66,59 @@ def display():
 
 
         for index, habit in enumerate(habits_list):
-            print("┌" + "─" * (BOX_LENGTH + 1) + "┐")
-            print("│" + str(habits_list[habit]["streak"]).ljust(STREAK_TO_BOX) + "".join(habits_list[habit]["marks"]).ljust(BOX_LENGTH - STREAK_TO_BOX)  + "│")  #streak to be added still
-            print("│" + habit.ljust(BOX_LENGTH + 1) + "│")
-            print("└" + "─" * (BOX_LENGTH + 1) + "┘")
+            print(Fore.GREEN + "┌" + "─" * (BOX_LENGTH + 1) + "┐")
+            print(Fore.GREEN +"│" + str(habits_list[habit]["streak"]).ljust(STREAK_TO_BOX) + "".join(habits_list[habit]["marks"]).ljust(BOX_LENGTH - STREAK_TO_BOX)  + "│")  #streak to be added still
+            print(Fore.GREEN +"│" + habit.ljust(BOX_LENGTH + 1) + "│")
+            print(Fore.GREEN +"└" + "─" * (BOX_LENGTH + 1) + "┘")
 
 # adding new habits
 def adding_habits():
     global habits_list
-
-    print("Enter the new habit's name")
+    logo()
+    menu("Enter the new habit's name.")
     habit = input("> ")
+    clear_terminal()
+
+    if habit == "":
+        return
+
+    logo()
+    menu(f"\"{habit}\" was successfully added.")
+    input()
 
     habits_list.update({habit: {"marks": ["[O]" + " " * SPACE_BETWEEN_MARKS] * 7,"streak": 0,"marked_dates": []}})
 
 # logging habits
 def logging():
     global habits_list
+    logo()
+    menu("Which habit?")
+    display()
 
-    habit = input("Which habit?")
+    habit = input(">  ")
     day = now.weekday()
+    clear_terminal()
 
+    if habit == "":
+        return
 
     habits_list[habit]["marks"][day] = Fore.GREEN + "[X]" + Fore.RESET + " " * SPACE_BETWEEN_MARKS
     habits_list[habit]["streak"] += 1
     habits_list[habit]["marked_dates"].append(now)
 
+
 #menu
 def menu(message):
 
-
-    print(message)
-    print("┌" + "─" * (BOX_LENGTH + 1) + "┐")
-    print(f"│ [1] Log{" " * 59}[3] Edit Habits │")
-    print(f"│ [2] New Habit{" " * 53}[4] Settings    │")
-    print("└" + "─" * (BOX_LENGTH + 1) + "┘")
+    if message:
+        print("┌" + "─" * (BOX_LENGTH + 1) + "┐")
+        print("│ " + message.ljust(82) + "│")
+        print("└" + "─" * (BOX_LENGTH + 1) + "┘")
+    else:
+        print("┌" + "─" * (BOX_LENGTH + 1) + "┐")
+        print(f"│ [1] Log{" " * 59}[3] Edit Habits │")
+        print(f"│ [2] New Habit{" " * 53}[4] Settings    │")
+        print("└" + "─" * (BOX_LENGTH + 1) + "┘")
 
 
 
@@ -159,23 +176,25 @@ def main():
 
     while True:
         logo()
-        menu(random_quote())
+        menu(None)
         display()
         get_user_input()
         clear_terminal()
 
 
 
-        clear_terminal()
+
 
 
 
 def get_user_input():
 
     user_input = input("> ")
+    clear_terminal()
 
     if user_input == "1":
         logging()
+
     elif user_input == "2":
         adding_habits()
     elif user_input == "3":
@@ -184,7 +203,6 @@ def get_user_input():
         ...
     else:
         input("Invalid input (Press \"Enter\" to continue.")
-
 
 
 
