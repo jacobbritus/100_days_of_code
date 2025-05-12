@@ -1,0 +1,129 @@
+02/05/2025
+
+12:00
+I'm really excited to start this course as I'll be learning a lot more about python.
+I'll gain a deeper understanding on how everything works in python
+I'll be able to create way more and meaningful things.
+I'll have confidence in my ability to code.
+
+
+22:22
+so far, I've made 4 projects.
+i was doing other python stuff mostly.
+i was not sure whether i wanted to relearn or skip the beginner parts.
+3_horror_choice_based_game.py was fun to make gotta say.
+i really tried to write a creepy story.
+
+03/05/2025
+
+12:02
+starting with day 5: loops
+im excited as im gonna be making a password generator
+
+i started of and i had issues,
+my flow didn't work as i tried to do everything in one range() loop.
+
+while it's possible using a while loop,
+it's not using range().
+
+i first asked for the amount of each character (letters, numbers or symbols)
+
+then i had if elif statements to choose a
+random list including either letters, numbers or symbols,
+checked if the max amount hasn't been reached,
+added a random index to password, and then added one to
+the amount of times the character type has been used.
+
+the issues is that if one flow maxed out and it was chosen by random.choice(),
+nothing would get added to the password.
+
+i tried to add an else that increased the total amount of iteration,
+but you can't increase the amount of times a range() loop iterates
+after it has already started.
+
+i learnt to get the amount of random characters first in different
+range() loops into a list, randomize the list,
+and then add it one by one to an empty string.
+
+a while loops goes until condition is true
+
+a range() goes until a set number has been reached
+
+04 / 05 / 2025
+
+16:22
+im at day 6 now
+
+i just finished the Lost in Maze project on Reeborg's World
+i was finding it really difficult until i read the assignment
+i was brute forcing it not using the things i needed to finish it
+
+this has project thought me to read things properly
+and to have a plan before trying to avoid brute forcing / trial and error too much
+
+05 / 05 / 2025
+
+word = cool
+
+for char in word:
+
+
+hidden_word = "_" * len(word)
+
+
+
+
+1. guess a letter
+
+index = word.letter
+
+2. check if letter in word to guess
+
+3. if yes letter appears in hidden word
+
+	3. count the times it appears
+
+	4. if appears again
+
+	5. replace the index
+
+
+
+else lives - 1
+
+
+i was struggling to check whether a letter has multiple occurences in the string
+
+i couldnt think of anything
+
+but now, i've come up with a solution
+
+i converted the word to guess into a list
+
+then if the letter is in the list it adds it to the guessers list and then i turn the first occurence (thats how .find works) into a underscore
+
+after i got a while loop that checks whether the count of the guessed letter is higher OR EQUAL than 1
+
+1. if so it does a .find again
+
+2. adds it to the guessers list
+
+3. and replaces the next occurence of the letter with an underscore
+
+4. repeat until while loop is false!!!!!!!!
+
+it was fun this had me veryyyy engaged honestly
+
+at first it was frustrating, but then i realized, after time again, that thats what its about
+
+i looked up methods and got reminded that "".join can be used on lists (i tried but used it like: join(list))
+
+
+08-05
+
+17:51
+i just finished making the caesar encryption thing in 5 minutes
+
+im pretty proud of myself
+
+as it proves my experience in string and list operations
